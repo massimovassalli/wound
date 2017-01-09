@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>facewindow</class>
+ <widget class="QMainWindow" name="facewindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>848</width>
+    <height>565</height>
+   </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>wound.png</normaloff>wound.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTreeWidget" name="treeWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <column>
+       <property name="text">
+        <string notr="true">Expriment tree</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="pic">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>128</width>
+        <height>96</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>0</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: gray;</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap>../../../VCCRI/Cell migration assay/Stitching/Eleventh Plate - GFP_hP1 stable line +- mBcd (wells 4-5-6) p.26/Day1/Well 1 - Day1/15161743.png</pixmap>
+      </property>
+      <property name="scaledContents">
+       <bool>true</bool>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>848</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuExperiment">
+    <property name="title">
+     <string>Experiment</string>
+    </property>
+    <addaction name="actionLoad"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionGuess"/>
+   </widget>
+   <widget class="QMenu" name="menuTimepoint">
+    <property name="title">
+     <string>Timepoint</string>
+    </property>
+    <addaction name="actionAdd"/>
+    <addaction name="actionRemove"/>
+   </widget>
+   <widget class="QMenu" name="menuWell">
+    <property name="title">
+     <string>Well</string>
+    </property>
+    <addaction name="actionAdd_2"/>
+    <addaction name="actionRemove_2"/>
+    <addaction name="actionProcess"/>
+    <addaction name="actionStitch"/>
+   </widget>
+   <widget class="QMenu" name="menuPicture">
+    <property name="title">
+     <string>Picture</string>
+    </property>
+    <addaction name="actionAdd_3"/>
+    <addaction name="actionRemove_3"/>
+   </widget>
+   <addaction name="menuExperiment"/>
+   <addaction name="menuTimepoint"/>
+   <addaction name="menuWell"/>
+   <addaction name="menuPicture"/>
+  </widget>
+  <action name="actionLoad">
+   <property name="text">
+    <string>Load</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionAdd">
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="actionRemove">
+   <property name="text">
+    <string>Remove</string>
+   </property>
+  </action>
+  <action name="actionAdd_2">
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="actionRemove_2">
+   <property name="text">
+    <string>Remove</string>
+   </property>
+  </action>
+  <action name="actionAdd_3">
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="actionRemove_3">
+   <property name="text">
+    <string>Remove</string>
+   </property>
+  </action>
+  <action name="actionProcess">
+   <property name="text">
+    <string>Process</string>
+   </property>
+  </action>
+  <action name="actionStitch">
+   <property name="text">
+    <string>Stitch</string>
+   </property>
+  </action>
+  <action name="actionGuess">
+   <property name="text">
+    <string>Guess</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>test(int)</slot>
+  <slot>test()</slot>
+  <slot>plotImage()</slot>
+  <slot>viewCurve()</slot>
+  <slot>goToCurve(int)</slot>
+  <slot>moveJumping()</slot>
+  <slot>moveJumping(int)</slot>
+  <slot>addDirectory()</slot>
+  <slot>addFiles()</slot>
+  <slot>switchColor()</slot>
+  <slot>saveCurves()</slot>
+  <slot>processNext()</slot>
+  <slot>savePeaks()</slot>
+  <slot>refreshCurve()</slot>
+ </slots>
+</ui>
