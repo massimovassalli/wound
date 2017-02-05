@@ -1,5 +1,5 @@
 import os
-
+import pickle
 
 class myiter(object):
 
@@ -7,6 +7,7 @@ class myiter(object):
         self._children = []
         self.dir = None
         self.parent = None
+        self.imgTypes = ('.JPG' , '.jpg'  )
         self.init()
 
     def is_exp(self):
@@ -34,6 +35,13 @@ class myiter(object):
     def init(self):
         pass
 
+    def open(self):
+        pass
+
+    def guess(self,folder):
+        self.dir = folder
+        return self.open()
+
     def __getitem__(self, key):
         return self._children[key]
 
@@ -54,55 +62,89 @@ class myiter(object):
         return self._children.__iter__()
 
     @property
-    def basename(self):
+    def basedir(self):
+        nm = os.path.normpath(self.dir)
+        if os.path.isdir(nm):
+            return nm
+        else:
+            return os.path.dirname(nm)
+
+    @property
+    def filename(self):
         return os.path.basename(os.path.normpath(self.dir))
+
+    @property
+    def basename(self):
+        fname = self.filename
+        dot = fname.rfind('.')
+        return fname[0:dot]
 
 
 class picture(myiter):
+
     def __init__(self,fname=None):
         myiter.__init__(self)
         self.dir = fname
 
+    def isProcessed(self):
+        png = self.basename + '.xpng'
+        return os.path.isfile(png)
+
+
 class well(myiter):
 
-    def guess(self,folder):
+    def __init__(self,dname=None):
+        myiter.__init__(self)
+        self.dir = dname
+
+    def open(self, imgTypes = ('.JPG' , '.jpg'  )):
         fds = []
-        for entry in os.scandir(folder):
+        for entry in os.scandir(self.basedir):
             if entry.is_file():
                 ext = os.path.splitext(entry.name)[-1]
-                if ext in ('.JPG' , '.jpg'  ):
+                if ext in self.imgTypes:
                     fds.append(entry.name)
         if len(fds) == 0:
             return False
         fds.sort()
-        self.dir = folder
         for fname in fds:
-            self.append(picture(os.path.join(folder,fname)))
+            self.append(picture(os.path.join(self.basedir, fname)))
         return True
 
+
 class timepoint(myiter):
+
+    def __init__(self,dname=None):
+        myiter.__init__(self)
+        self.dir = dname
 
     def init(self):
         self.time = None
 
-    def guess(self,folder):
+    def open(self):
         fds = []
-        for entry in os.scandir(folder):
+        for entry in os.scandir(self.basedir):
             if entry.is_dir():
                 fds.append(entry.name)
-        if len(fds)==0:
+        if len(fds) == 0:
             return False
         fds.sort()
         rtr = False
         for subdir in fds:
             o = well()
-            if o.guess( os.path.join(folder,subdir)) :
+            o.imgTypes = self.imgTypes
+            if o.guess(os.path.join(self.basedir, subdir)):
                 rtr = True
-                self.dir = folder
                 self.append(o)
         return rtr
 
+
 class exp(myiter):
+
+    def save(self,filename):
+        f = open(filename,'wb')
+        pickle.dump(self,f)
+        f.close()
 
     def guess(self,folder):
         fds = []
@@ -115,8 +157,16 @@ class exp(myiter):
         rtr = False
         for subdir in fds:
             o = timepoint()
+            o.imgTypes = self.imgTypes
             if o.guess( os.path.join(folder,subdir)) :
                 rtr = True
                 self.dir = folder
                 self.append(o)
         return rtr
+
+
+def load(filename):
+    f = open(filename, 'rb')
+    a = pickle.load(f)
+    f.close()
+    return a

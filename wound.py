@@ -51,6 +51,23 @@ class woundWindow ( QtWidgets.QMainWindow ):
 
         #progress = QtWidgets.QProgressDialog("Opening files...", "Cancel opening", 0, pmax)
 
+    def expSave(self):
+        filtered = QtWidgets.QFileDialog.getSaveFileName(self,caption='Save the experiment',filter='*.exp')
+        if filtered[0] != '':
+            filename = filtered[0]
+            if filename[-4:] != '.exp':
+                filename = filename + '.exp'
+            self.exp.save(filename)
+
+    def expLoad(self):
+        selection = QtWidgets.QFileDialog.getOpenFileName  (self, caption='Select an experiment file',filter='*.exp')
+        filename = selection[0]
+        if not os.path.isfile(filename):
+            return
+        QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        self.exp = engine.load(filename)
+        self.refreshTree()
+        QtWidgets.QApplication.restoreOverrideCursor()
 
     def expGuess(self):
         folder = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select a directory', './')
@@ -85,6 +102,8 @@ class woundWindow ( QtWidgets.QMainWindow ):
         #    o.valueChanged.connect(self.reddish)
 
         self.ui.actionGuess.triggered.connect(self.expGuess)
+        self.ui.actionLoad.triggered.connect(self.expLoad)
+        self.ui.actionSave.triggered.connect(self.expSave)
 
         self.ui.treeWidget.currentItemChanged.connect(self.watch)
 
