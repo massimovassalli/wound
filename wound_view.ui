@@ -86,7 +86,7 @@
      <x>0</x>
      <y>0</y>
      <width>848</width>
-     <height>19</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuExperiment">
@@ -108,8 +108,8 @@
     <property name="title">
      <string>Well</string>
     </property>
-    <addaction name="actionAdd_2"/>
-    <addaction name="actionRemove_2"/>
+    <addaction name="actionAddWell"/>
+    <addaction name="actionRemoveWell"/>
     <addaction name="actionProcess"/>
     <addaction name="actionStitch"/>
    </widget>
@@ -117,8 +117,8 @@
     <property name="title">
      <string>Picture</string>
     </property>
-    <addaction name="actionAdd_3"/>
-    <addaction name="actionRemove_3"/>
+    <addaction name="actionAddPic"/>
+    <addaction name="actionRemovePic"/>
    </widget>
    <addaction name="menuExperiment"/>
    <addaction name="menuTimepoint"/>
@@ -145,32 +145,38 @@
     <string>Remove</string>
    </property>
   </action>
-  <action name="actionAdd_2">
+  <action name="actionAddWell">
    <property name="text">
     <string>Add</string>
    </property>
   </action>
-  <action name="actionRemove_2">
+  <action name="actionRemoveWell">
    <property name="text">
     <string>Remove</string>
    </property>
   </action>
-  <action name="actionAdd_3">
+  <action name="actionAddPic">
    <property name="text">
     <string>Add</string>
    </property>
   </action>
-  <action name="actionRemove_3">
+  <action name="actionRemovePic">
    <property name="text">
     <string>Remove</string>
    </property>
   </action>
   <action name="actionProcess">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Process</string>
    </property>
   </action>
   <action name="actionStitch">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Stitch</string>
    </property>

@@ -10,6 +10,9 @@ class myiter(object):
         self.imgTypes = ('.JPG' , '.jpg'  )
         self.init()
 
+    def index(self,element):
+        return self._children.index(element)
+
     def is_exp(self):
         return isinstance(self,exp)
 
@@ -36,7 +39,7 @@ class myiter(object):
         pass
 
     def open(self):
-        pass
+        return True
 
     def guess(self,folder):
         self.dir = folder
@@ -77,7 +80,10 @@ class myiter(object):
     def basename(self):
         fname = self.filename
         dot = fname.rfind('.')
-        return fname[0:dot]
+        if dot == -1:
+            return fname
+        else:
+            return fname[0:dot]
 
 
 class picture(myiter):
