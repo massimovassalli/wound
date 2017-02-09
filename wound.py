@@ -102,7 +102,7 @@ class woundWindow ( QtWidgets.QMainWindow ):
             element = self.selectedItem
         myelement = element.src
         if myelement.is_picture():
-            QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+            QtWidgets.QApplication.setOverrideCursor( QtGui.QCursor(QtCore.Qt.WaitCursor))
             if self.ui.view_raw.isChecked():
                 self.ui.pic.setPixmap( QtGui.QPixmap(myelement.dir) )
             elif self.ui.view_stored.isChecked():
