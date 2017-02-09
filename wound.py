@@ -92,12 +92,32 @@ class woundWindow ( QtWidgets.QMainWindow ):
             QtWidgets.QApplication.restoreOverrideCursor()
             QtWidgets.QMessageBox.information(self, 'ERROR', 'The proposed directory could not be guessed as an experiment')
 
-    def watch(self,element):
+    def rewatch(self):
+        self.watch()
+
+    def watch(self,element=None):
         if self.rebuilding is True:
             return
+        if element is None:
+            element = self.selectedItem
         myelement = element.src
         if myelement.is_picture():
-            self.ui.pic.setPixmap( QtGui.QPixmap(myelement.dir) )
+            QtWidgets.QApplication.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+            if self.ui.view_raw.isChecked():
+                self.ui.pic.setPixmap( QtGui.QPixmap(myelement.dir) )
+            elif self.ui.view_stored.isChecked():
+                if myelement.isProcessed():
+                    q = QtGui.QPixmap(myelement.dir)
+                    q.setMask(QtGui.QBitmap(myelement.saveName))
+                    self.ui.pic.setPixmap(q)
+                else:
+                    self.ui.pic.setPixmap(QtGui.QPixmap(myelement.dir))
+            elif self.ui.view_otf.isChecked():
+                myelement.process()
+                q = QtGui.QPixmap(myelement.dir)
+                q.setMask( QtGui.QBitmap(myelement.saveName))
+                self.ui.pic.setPixmap(q)
+            QtWidgets.QApplication.restoreOverrideCursor()
 
     def tpAdd(self):
         folder = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select a TimePoint directory', './')
@@ -181,6 +201,7 @@ class woundWindow ( QtWidgets.QMainWindow ):
         self.ui.actionLoad.triggered.connect(self.expLoad)
         self.ui.actionSave.triggered.connect(self.expSave)
         self.ui.treeWidget.currentItemChanged.connect(self.selectElement)
+
         self.ui.actionAdd.triggered.connect(self.tpAdd)
         self.ui.actionRemove.triggered.connect(self.tpDel)
         self.ui.actionAddWell.triggered.connect(self.wellAdd)
@@ -189,6 +210,10 @@ class woundWindow ( QtWidgets.QMainWindow ):
         self.ui.actionRemovePic.triggered.connect(self.picDel)
 
         self.ui.treeWidget.currentItemChanged.connect(self.watch)
+        self.ui.view_stored.clicked.connect(self.rewatch)
+        self.ui.view_raw.clicked.connect(self.rewatch)
+        self.ui.view_otf.clicked.connect(self.rewatch)
+
 
         QtCore.QMetaObject.connectSlotsByName(self)
 

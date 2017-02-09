@@ -1,5 +1,6 @@
 import os
 import pickle
+from skimage import feature,filters,morphology,measure,transform,io,color
 
 class myiter(object):
 
@@ -87,14 +88,51 @@ class myiter(object):
 
 
 class picture(myiter):
-
     def __init__(self,fname=None):
         myiter.__init__(self)
         self.dir = fname
 
+    @property
+    def saveName(self):
+        return os.path.join(self.basedir , self.basename + '_mask.png')
+
     def isProcessed(self):
-        png = self.basename + '.xpng'
-        return os.path.isfile(png)
+        return os.path.isfile(self.saveName)
+
+    def process(self):
+
+        cannysigma = .1
+        diskradius = 1
+        minsize = 4000
+
+        import numpy as np
+        image =  color.rgb2grey(io.imread(self.dir))
+
+        # segmenting
+        can2 = feature.canny(image, cannysigma)
+        der2 = filters.rank.gradient(can2, morphology.disk(diskradius))
+        mask = der2 == 0
+
+        #lbl = morphology.label(mask)
+        #reg = measure.regionprops(lbl)
+
+        mask = morphology.remove_small_objects(mask, minsize)
+
+        io.imsave(self.saveName, mask*200)
+
+
+        # rotating
+        #if self._first is True:
+        #    d = int(mask.shape[1] / 2)
+        #    angle = self.getInclination(mask[:, d:])
+        #elif self._last is True:
+        #    d = int(mask.shape[1] / 2)
+        #    angle = self.getInclination(mask[:, 0:d])
+        #else:
+        #    angle = self.getInclination(mask)
+        #maskall = transform.rotate(mask, angle, order=0, mode='edge')
+        #self.mask = maskall
+        #self.rawimage = transform.rotate(self.rawimage, angle, False, mode='edge')
 
 
 class well(myiter):
