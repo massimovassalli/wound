@@ -107,16 +107,12 @@ class woundWindow ( QtWidgets.QMainWindow ):
                 self.ui.pic.setPixmap( QtGui.QPixmap(myelement.dir) )
             elif self.ui.view_stored.isChecked():
                 if myelement.isProcessed():
-                    q = QtGui.QPixmap(myelement.dir)
-                    q.setMask(QtGui.QBitmap(myelement.saveName))
-                    self.ui.pic.setPixmap(q)
+                    self.ui.pic.setPixmap(QtGui.QPixmap(myelement.getOverlay()))
                 else:
                     self.ui.pic.setPixmap(QtGui.QPixmap(myelement.dir))
             elif self.ui.view_otf.isChecked():
-                myelement.process()
-                q = QtGui.QPixmap(myelement.dir)
-                q.setMask( QtGui.QBitmap(myelement.saveName))
-                self.ui.pic.setPixmap(q)
+                myelement.process( sens = self.ui.cannysigma.value()/100.0, minhole=self.ui.minholes.value(),minobj=self.ui.minobj.value() )
+                self.ui.pic.setPixmap(QtGui.QPixmap(myelement.getOverlay()))
             QtWidgets.QApplication.restoreOverrideCursor()
 
     def tpAdd(self):
@@ -214,6 +210,9 @@ class woundWindow ( QtWidgets.QMainWindow ):
         self.ui.view_raw.clicked.connect(self.rewatch)
         self.ui.view_otf.clicked.connect(self.rewatch)
 
+        self.ui.cannysigma.valueChanged.connect(self.rewatch)
+        self.ui.minobj.valueChanged.connect(self.rewatch)
+        self.ui.minholes.valueChanged.connect(self.rewatch)
 
         QtCore.QMetaObject.connectSlotsByName(self)
 

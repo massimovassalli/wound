@@ -1,6 +1,7 @@
 import os
 import pickle
-from skimage import feature,filters,morphology,measure,transform,io,color
+from skimage import feature,filters,morphology,measure,transform,io,color,segmentation
+import numpy as np
 
 class myiter(object):
 
@@ -99,26 +100,36 @@ class picture(myiter):
     def isProcessed(self):
         return os.path.isfile(self.saveName)
 
-    def process(self):
-
-        cannysigma = .1
-        diskradius = 1
+    def process(self,sens = 0.1,minhole=64,minobj=64,save=True):
         minsize = 4000
 
         import numpy as np
         image =  color.rgb2grey(io.imread(self.dir))
+        mask = morphology.remove_small_objects(morphology.remove_small_holes(
+            morphology.opening(filters.sobel(image)>sens),min_size=minhole),min_size=minobj)
 
-        # segmenting
-        can2 = feature.canny(image, cannysigma)
-        der2 = filters.rank.gradient(can2, morphology.disk(diskradius))
-        mask = der2 == 0
+        io.imsave(self.saveName, mask)
 
-        #lbl = morphology.label(mask)
-        #reg = measure.regionprops(lbl)
+    def getOverlay(self):
+        mask = io.imread(self.saveName).astype(bool)
+        image = color.rgb2grey(io.imread(self.dir))
+        miniMask = morphology.binary_erosion(mask)
+        edges = mask ^ miniMask
+        overlay = np.zeros([image.shape[0],image.shape[1],3])
+        image0 = image.copy()
+        image0[edges]=0.0
+        image1 = image.copy()
+        image1[edges] = 1.0
+        overlay[:,:,0]=image1
+        overlay[:, :, 1] = image0
+        overlay[:, :, 2] = image0
+        overName = os.path.join(self.basedir,'tmp.png')
+        io.imsave(overName,overlay)
+        return overName
 
-        mask = morphology.remove_small_objects(mask, minsize)
+    def save(self):
+        io.imsave(self.saveName, self.mask)
 
-        io.imsave(self.saveName, mask*200)
 
 
         # rotating
